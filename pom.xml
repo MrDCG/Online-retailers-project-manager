@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.fsClothes</groupId>
+    <artifactId>fs-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>com.fsClothes</groupId>
+  <artifactId>fs-manager</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <modules>
+  	<module>fs-manager-pojo</module>
+  	<module>fs-manager-mapper</module>
+  	<module>fs-manager-interface</module>
+  	<module>fs-manager-service</module>
+  </modules>
+  <dependencies>
+  
+  </dependencies>
+  <build>
+        <plugins>
+	        
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <!-- 请求路径 -->
+                    <path>/</path>
+                    <!-- 指定端口 -->
+                    <port>8081</port>
+                    <uriEncoding>UTF-8</uriEncoding>
+                     <!--log4j配置文件位置-->
+                    <systemProperties>
+                        <log4j.configuration>file:src/main/resources/log4j.properties</log4j.configuration>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

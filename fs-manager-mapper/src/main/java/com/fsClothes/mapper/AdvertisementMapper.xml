@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fsClothes.mapper.AdvertisementMapper">
+	<!-- 动态sql -->
+	<sql id="baseSql">
+		select a.id,a.ad_imgpath,a.product_id,p.product_name,p.product_date,
+		c.category_name
+		from t_product p 
+		join t_category c on p.product_categoryid=c.id
+		join t_advertisement a on p.id = a.product_id
+	</sql>
+	<select id="findAllAd" resultMap="selectAll">
+		<include refid="baseSql" />
+	</select>
+	<select id="findIsShelf" resultMap="SelectProduct">
+		select id,product_name from t_product where shelf=1;
+	</select>
+	<delete id="delete">
+		delete from t_advertisement where id=#{id}
+	</delete>
+	<delete id="batchDelete">
+		delete from t_advertisement where id in 
+		<foreach collection="array" item="id" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<insert id="adAdd" parameterType="Advertisement">
+		insert into t_advertisement values(null,#{productId},#{adImgPath})
+	</insert>
+	
+	<update id="update" parameterType="Advertisement">
+		update t_advertisement set product_id=#{productId},ad_imgpath=#{adImgPath}
+		where id=#{id}
+	</update>
+	
+	<resultMap type="Advertisement" id="selectAll">
+		<id property="id" column="id"/>
+		<result property="adImgPath" column="ad_imgpath"/>
+		<result property="productId" column="product_id"/>
+		<result property="productName" column="product_name"/>
+		<result property="categoryName" column="category_name"/>	
+		<result property="productDate" column="product_date"/>	
+	</resultMap>
+	<resultMap type="Product" id="SelectProduct">
+		<id property="id" column="id"/>
+		<result property="productName" column="product_name"/>
+		
+	</resultMap>
+</mapper>

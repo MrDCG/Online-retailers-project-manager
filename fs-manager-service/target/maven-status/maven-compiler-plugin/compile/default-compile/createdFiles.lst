@@ -1,0 +1,4 @@
+com\fsClothes\service\impl\CategoryServiceImpl.class
+com\fsClothes\service\impl\ProductServiceImpl.class
+com\fsClothes\service\impl\AdminServiceImpl.class
+com\fsClothes\service\impl\UserServiceImpl.class

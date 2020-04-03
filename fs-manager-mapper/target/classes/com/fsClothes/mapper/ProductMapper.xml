@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fsClothes.mapper.ProductMapper">
+	<!-- 动态sql -->
+	<sql id="baseSql">             
+		select p.id pid,p.product_name,p.product_description,p.normalprice,
+		p.memberprice,p.stock,p.shelf,p.product_date,p.product_imgpath,
+		c.id cid,c.category_name,c.category_description,c.category_parent_id,c.leaf,c.grade
+		from t_product p join t_category c on p.product_categoryid=c.id
+	</sql>
+	<select id="findAll" resultMap="SelectAll">
+		<include refid="baseSql"/> limit #{startIndex},#{pageSize}
+	</select>
+	
+	<select id="findAllCount" resultType="int">
+		select count(*)
+		from t_product p join t_category c on p.product_categoryid=c.id
+	</select>
+	<select id="findShelf" resultType="int">
+		select count(*)
+		from t_product where shelf=1
+	</select>
+	<select id="findLShelf" resultType="int">
+		select count(*)
+		from t_product where shelf=0
+	</select>
+	<select id="findAllSum" resultType="int">
+		select sum(stock) from t_product
+	</select>
+	
+	<select id="findConditionCount" parameterType="ProductConditionVO" resultType="int">
+		select count(*) from t_product p join t_category c on p.product_categoryid=c.id
+		<where>
+			<if test="keywords!=null">
+				(p.product_name like concat("%",#{keywords},"%") 
+				or p.product_description like concat("%",#{keywords},"%")) 
+			</if>
+			<if test="-1!=categoryId">
+				and c.id=#{categoryId}
+			</if>
+			<if test="lowprice!=null and highprice!=null">
+				and normalprice between #{lowprice} and #{highprice}
+			</if>
+			<if test="lowprice!=null and highprice==null">
+				and normalprice >= #{lowprice}
+			</if>
+			<if test="lowprice==null and highprice!=null">
+				and normalprice <![CDATA[<=]]> #{highprice}
+			</if>
+			<if test="startDate!=null and endDate!=null">
+				and product_date between #{startDate} and #{endDate}
+			</if>
+			<if test="startDate!=null and endDate==null">
+				and product_date >= #{startDate}
+			</if>
+			<if test="startDate==null and endDate!=null">
+				and product_date<![CDATA[<=]]>#{endDate}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findCondition" resultMap="SelectAll">
+		<include refid="baseSql"/> 
+		<where>
+			<if test="productConditionVO.keywords!=null">
+				(p.product_name like concat("%",#{productConditionVO.keywords},"%") 
+				or p.product_description like concat("%",#{productConditionVO.keywords},"%"))
+			</if>
+			<if test="-1!=productConditionVO.categoryId">
+				and c.id=#{productConditionVO.categoryId}
+			</if>
+			<if test="productConditionVO.lowprice!=null and productConditionVO.highprice!=null">
+				and normalprice between #{productConditionVO.lowprice} and #{productConditionVO.highprice}
+			</if>
+			<if test="productConditionVO.lowprice!=null and productConditionVO.highprice==null">
+				and normalprice >= #{productConditionVO.lowprice}
+			</if>
+			<if test="productConditionVO.lowprice==null and productConditionVO.highprice!=null">
+				and normalprice <![CDATA[<=]]> #{productConditionVO.highprice}
+			</if>
+			<if test="productConditionVO.startDate!=null and productConditionVO.endDate!=null">
+				and product_date between #{productConditionVO.startDate} and #{productConditionVO.endDate}
+			</if>
+			<if test="productConditionVO.startDate!=null and productConditionVO.endDate==null">
+				and product_date >= #{productConditionVO.startDate}
+			</if>
+			<if test="productConditionVO.startDate==null and productConditionVO.endDate!=null">
+				and product_date<![CDATA[<=]]>#{productConditionVO.endDate}
+			</if>
+		</where>
+			limit #{startIndex},#{pageSize}
+	</select>
+	
+	<insert id="insert" parameterType="Product">
+		insert into t_product(id,product_name,product_description,normalprice,memberprice,stock,shelf,product_date,product_categoryid,product_imgpath)
+		 values(null,#{productName},#{productDescription},#{normalprice},#{memberprice},#{stock},#{shelf},#{productDate},#{categoryId},#{productImgpath})
+	</insert>
+	<update id="update" parameterType="Product">
+		update t_product set product_name=#{productName},product_description=#{productDescription},
+		normalprice=#{normalprice},memberprice=#{memberprice},stock=#{stock},shelf=#{shelf},
+		product_date=#{productDate},product_categoryid=#{categoryId},product_imgpath=#{productImgpath}
+		where id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from t_product where id=#{id}
+	</delete>
+	<delete id="batchDelete">
+		delete from t_product where id in 
+		<foreach collection="array" item="id" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<resultMap type="Product" id="SelectAll">
+		<id property="id" column="pid"/>
+		<result property="productName" column="product_name"/>
+		<result property="productDescription" column="product_description"/>
+		<result property="normalprice" column="normalprice"/>
+		<result property="memberprice" column="memberprice"/>
+		<result property="stock" column="stock"/>
+		<result property="shelf" column="shelf"/>
+		<result property="productDate" column="product_date"/>
+		<result property="productImgpath" column="product_imgpath"/>
+		<association property="category" javaType="Category">
+			<id property="id" column="cid"/>
+			<result property="categoryName" column="category_name"/>
+			<result property="categoryDescription" column="category_description"/>
+			<result property="categoryParentId" column="category_parent_id"/>
+			<result property="leaf" column="leaf"/>
+			<result property="grade" column="grade"/>
+		</association>
+	</resultMap>
+	
+</mapper>
