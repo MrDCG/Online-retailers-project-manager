@@ -52,10 +52,6 @@ public class ProductServiceImpl implements ProductService {
 		productMapper.insert(product);
 	}
 
-
-
-
-
 	@Override
 	public Page<Product> findAllByPage(Page<Product> page) {
 			page.setTotalRecord(productMapper.findAllCount());
@@ -64,28 +60,14 @@ public class ProductServiceImpl implements ProductService {
 			return page;
 	}
 
-
-
-
-
 	@Override
 	public void update(Product product) {
 		productMapper.update(product);
 	}
-
-
-
-
-
 	@Override
 	public void delete(int id) {
 		productMapper.delete(id);
 	}
-
-
-
-
-
 	@Override
 	public void batchDelete(String checkedId) {
 		productMapper.batchDelete(checkedId.split(","));
@@ -212,36 +194,19 @@ public class ProductServiceImpl implements ProductService {
 		
 		return page;
     }
-
-
-
 	@Override
 	public int findAllCount() {
 		return productMapper.findAllCount();
 	}
-
-
-
-
-
 	@Override
 	public int findAllSum() {
 		return productMapper.findAllSum();
 	}
 
-
-
-
-
 	@Override
 	public int findShelf() {
 		return productMapper.findShelf();
 	}
-
-
-
-
-
 	@Override
 	public int findLShelf() {
 		return productMapper.findLShelf();
