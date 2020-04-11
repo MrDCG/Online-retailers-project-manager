@@ -2,6 +2,8 @@ com\fsClothes\pojo\ProductConditionVO.class
 com\fsClothes\pojo\CategoryRootBean.class
 com\fsClothes\pojo\User.class
 com\fsClothes\pojo\Product.class
+com\fsClothes\pojo\ProductImgPath.class
+com\fsClothes\pojo\ProductInfo.class
 com\fsClothes\pojo\Admin.class
 com\fsClothes\pojo\Category.class
 com\fsClothes\pojo\Advertisement.class

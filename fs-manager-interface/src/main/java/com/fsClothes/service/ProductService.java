@@ -10,7 +10,7 @@ import com.fsClothes.pojo.ProductConditionVO;
  *
  */
 public interface ProductService {
-	void insert(Product product);
+	int insert(Product product);
 
 	Page<Product> findAllByPage(Page<Product> page);
 
@@ -36,4 +36,6 @@ public interface ProductService {
 	 * @return 下架商品数
 	 */
 	int findLShelf();
+
+	void insertPaths(int productId,String productImgpaths, String productExplainImgpaths);
 }

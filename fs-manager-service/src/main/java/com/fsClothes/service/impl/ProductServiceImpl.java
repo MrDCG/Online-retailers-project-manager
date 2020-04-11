@@ -27,6 +27,7 @@ import com.fsClothes.pojo.Category;
 import com.fsClothes.pojo.Page;
 import com.fsClothes.pojo.Product;
 import com.fsClothes.pojo.ProductConditionVO;
+import com.fsClothes.pojo.ProductImgPath;
 import com.fsClothes.service.ProductService;
 
 
@@ -48,8 +49,9 @@ public class ProductServiceImpl implements ProductService {
     private HttpSolrClient httpSolrClient;
 
 	@Override
-	public void insert(Product product) {
+	public int insert(Product product) {
 		productMapper.insert(product);
+		return product.getId();
 	}
 
 	@Override
@@ -210,5 +212,21 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public int findLShelf() {
 		return productMapper.findLShelf();
+	}
+
+	@Override
+	public void insertPaths(int peoductId,String productImgpaths, String productExplainImgpaths) {
+		String[] imgPaths1 = productImgpaths.split("http:");
+		String[] imgPaths2 = productExplainImgpaths.split("http:");
+		List<ProductImgPath> proImgPaths = new ArrayList<ProductImgPath>();
+		for (int i = 1; i < imgPaths1.length; i++) {
+			ProductImgPath productImgPath = new ProductImgPath(null,peoductId,1,"http:"+imgPaths1[i]);
+			proImgPaths.add(productImgPath);
+		}
+		for (int i = 1; i < imgPaths2.length; i++) {
+			ProductImgPath productImgPath = new ProductImgPath(null,peoductId,0,"http:"+imgPaths2[i]);
+			proImgPaths.add(productImgPath);
+		}
+		productMapper.insertPaths(proImgPaths);
 	}
 }

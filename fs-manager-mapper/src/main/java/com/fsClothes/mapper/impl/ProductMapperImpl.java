@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.fsClothes.mapper.ProductMapper;
 import com.fsClothes.pojo.Product;
 import com.fsClothes.pojo.ProductConditionVO;
+import com.fsClothes.pojo.ProductImgPath;
 
 
 /** 
@@ -31,8 +32,8 @@ public class ProductMapperImpl extends SqlSessionDaoSupport implements ProductMa
 		return getSqlSession().getMapper(ProductMapper.class).findAll(startIndex,pageSize);
 	}
 	@Override
-	public void insert(Product product) {
-		getSqlSession().getMapper(ProductMapper.class).insert(product);
+	public int insert(Product product) {
+		return getSqlSession().getMapper(ProductMapper.class).insert(product);
 	}
 	@Override
 	public int findAllCount() {
@@ -69,6 +70,10 @@ public class ProductMapperImpl extends SqlSessionDaoSupport implements ProductMa
 	@Override
 	public List<Product> findCondition(int startIndex, int pageSize,ProductConditionVO productConditionVO) {
 		return getSqlSession().getMapper(ProductMapper.class).findCondition(startIndex, pageSize,productConditionVO);
+	}
+	@Override
+	public void insertPaths(List<ProductImgPath> proImgPaths) {
+		getSqlSession().getMapper(ProductMapper.class).insertPaths(proImgPaths);
 	}
 
 }

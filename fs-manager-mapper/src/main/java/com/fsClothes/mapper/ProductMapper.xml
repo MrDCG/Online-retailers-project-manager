@@ -93,10 +93,27 @@
 			limit #{startIndex},#{pageSize}
 	</select>
 	
-	<insert id="insert" parameterType="Product">
-		insert into t_product(id,product_name,product_description,normalprice,memberprice,stock,shelf,product_date,product_categoryid,product_imgpath)
-		 values(null,#{productName},#{productDescription},#{normalprice},#{memberprice},#{stock},#{shelf},#{productDate},#{categoryId},#{productImgpath})
+	<insert id="insert" parameterType="Product" useGeneratedKeys="true">
+		insert into t_product(product_name,product_description,normalprice,memberprice,stock,shelf,product_date,product_categoryid,product_imgpath)
+		 values(#{productName},#{productDescription},#{normalprice},#{memberprice},#{stock},#{shelf},#{productDate},#{categoryId},#{productImgpath})
+		<selectKey resultType="int" keyColumn="id" keyProperty="id" order="AFTER">
+			select last_insert_id()
+		</selectKey>
 	</insert>
+	
+	<insert id="insertPaths" parameterType="java.util.List">
+		insert into t_product_imgs(id,product_id,is_show,imgpath) values
+		<foreach collection="list" item="productImgPath" index="index" separator=",">
+    				(
+    					#{productImgPath.id},
+    					#{productImgPath.productId},
+    					#{productImgPath.isShow},
+    					#{productImgPath.imgPath}
+    				)
+    		     </foreach>		
+
+	</insert>
+	
 	<update id="update" parameterType="Product">
 		update t_product set product_name=#{productName},product_description=#{productDescription},
 		normalprice=#{normalprice},memberprice=#{memberprice},stock=#{stock},shelf=#{shelf},

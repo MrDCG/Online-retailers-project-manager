@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fsClothes.mapper.ItemMapper">
+	<!-- 动态sql -->
+	<sql id="baseSql">             
+		select p.id pid,p.product_name,p.product_description,p.normalprice,
+		p.memberprice,p.stock,p.shelf,p.product_date,p.product_imgpath,
+		c.id cid,c.category_name,c.category_description,c.category_parent_id,c.leaf,c.grade
+		from t_product p join t_category c on p.product_categoryid=c.id
+	</sql>
+	<select id="findProduct" parameterType="int" resultMap="SelectProduct">
+		<include refid="baseSql"/> where p.id=#{productId}
+	</select>
+	
+	<select id="findImgPaths" resultMap="SelectImgPaths">
+		select id,is_show,product_id,imgpath
+		from t_product_imgs where product_id=#{productId} and is_show=#{isShow}
+	</select>
+	
+	<resultMap type="Product" id="SelectProduct">
+		<id property="id" column="pid"/>
+		<result property="productName" column="product_name"/>
+		<result property="productDescription" column="product_description"/>
+		<result property="normalprice" column="normalprice"/>
+		<result property="memberprice" column="memberprice"/>
+		<result property="stock" column="stock"/>
+		<result property="shelf" column="shelf"/>
+		<result property="productDate" column="product_date"/>
+		<result property="productImgpath" column="product_imgpath"/>
+		<association property="category" javaType="Category">
+			<id property="id" column="cid"/>
+			<result property="categoryName" column="category_name"/>
+			<result property="categoryDescription" column="category_description"/>
+			<result property="categoryParentId" column="category_parent_id"/>
+			<result property="leaf" column="leaf"/>
+			<result property="grade" column="grade"/>
+		</association>
+	</resultMap>
+	
+	<resultMap type="ProductImgPath" id="SelectImgPaths">
+		<id property="id" column="id"/>
+		<result property="productId" column="product_id"/>
+		<result property="isShow" column="is_show"/>
+		<result property="imgPath" column="imgpath"/>
+	</resultMap>
+</mapper>

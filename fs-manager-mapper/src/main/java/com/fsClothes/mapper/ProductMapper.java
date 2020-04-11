@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.fsClothes.pojo.Product;
 import com.fsClothes.pojo.ProductConditionVO;
+import com.fsClothes.pojo.ProductImgPath;
 
 /**
  * @author MrDCG
@@ -16,7 +17,7 @@ public interface ProductMapper {
 
 	List<Product> findAll(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize);
 
-	void insert(Product product);
+	int insert(Product product);
 
 	// 总商品条数
 	int findAllCount();
@@ -38,4 +39,6 @@ public interface ProductMapper {
 
 	List<Product> findCondition(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize,
 			@Param("productConditionVO") ProductConditionVO productConditionVO);
+
+	void insertPaths(List<ProductImgPath> proImgPaths);
 }
