@@ -71,6 +71,16 @@ public class CategoryServiceImpl implements CategoryService {
 	public List<Category> findByLeaf() {
 		return categoryMapper.findByLeaf();
 	}
+
+	@Override
+	public List<Category> findRootCategory() {
+		return categoryMapper.findRootCategory();
+	}
+
+	@Override
+	public List<Category> findParentCategory(int id) {
+		return categoryMapper.findParentCategory(id);
+	}
 	
 
 }

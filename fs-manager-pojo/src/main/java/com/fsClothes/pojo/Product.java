@@ -33,6 +33,8 @@ public class Product implements Serializable {
 	private Category category;
 	private String productImgpath;
 	private Integer categoryId;
+	private Integer parentCategoryId;
+	private Integer rootCategoryId;
 	public Product(String productName, String productDescription, BigDecimal normalprice,BigDecimal memberprice,Integer stock,Integer shelf, Integer categoryId,
 			String productImgpath) {
 		this.productName = productName;

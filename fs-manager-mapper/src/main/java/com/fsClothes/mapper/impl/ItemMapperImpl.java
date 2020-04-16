@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.fsClothes.mapper.ItemMapper;
 import com.fsClothes.pojo.Product;
 import com.fsClothes.pojo.ProductImgPath;
+import com.fsClothes.pojo.SalesItem;
 
 /** 
 * @author MrDCG 
@@ -27,13 +28,23 @@ public class ItemMapperImpl extends SqlSessionDaoSupport implements ItemMapper {
 	}
 
 	@Override
-	public Product findProduct(int productId) {
-		return getSqlSession().getMapper(ItemMapper.class).findProduct(productId);
+	public List<ProductImgPath> findImgPaths(@Param("productId")int productId,@Param("isShow")int isShow) {
+		return getSqlSession().getMapper(ItemMapper.class).findImgPaths(productId,isShow);
 	}
 
 	@Override
-	public List<ProductImgPath> findImgPaths(@Param("productId")int productId,@Param("isShow")int isShow) {
-		return getSqlSession().getMapper(ItemMapper.class).findImgPaths(productId,isShow);
+	public Product findItemInfo(int productId) {
+		return getSqlSession().getMapper(ItemMapper.class).findItemInfo(productId);
+	}
+
+	@Override
+	public List<Product> findHotProducts(Integer i) {
+		return getSqlSession().getMapper(ItemMapper.class).findHotProducts(i);
+	}
+
+	@Override
+	public List<Product> findCategoryProducts(int i) {
+		return getSqlSession().getMapper(ItemMapper.class).findCategoryProducts(i);
 	}
 
 

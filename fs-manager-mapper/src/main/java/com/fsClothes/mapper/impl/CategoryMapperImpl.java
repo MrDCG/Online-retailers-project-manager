@@ -76,5 +76,13 @@ public class CategoryMapperImpl extends SqlSessionDaoSupport implements Category
 	public List<Category> findByLeaf() {
 		return getSqlSession().getMapper(CategoryMapper.class).findByLeaf();
 	}
+	@Override
+	public List<Category> findRootCategory() {
+		return getSqlSession().getMapper(CategoryMapper.class).findRootCategory();
+	}
+	@Override
+	public List<Category> findParentCategory(int id) {
+		return getSqlSession().getMapper(CategoryMapper.class).findParentCategory(id);
+	}
 
 }

@@ -6,11 +6,11 @@
 	<!-- 动态sql -->
 	<sql id="baseSql">             
 		select p.id pid,p.product_name,p.product_description,p.normalprice,
-		p.memberprice,p.stock,p.shelf,p.product_date,p.product_imgpath,
+		p.memberprice,p.parent_categoryid,p.root_categoryid,p.stock,p.shelf,p.product_date,p.product_imgpath,
 		c.id cid,c.category_name,c.category_description,c.category_parent_id,c.leaf,c.grade
 		from t_product p join t_category c on p.product_categoryid=c.id
 	</sql>
-	<select id="findProduct" parameterType="int" resultMap="SelectProduct">
+	<select id="findItemInfo" parameterType="int" resultMap="SelectProduct">
 		<include refid="baseSql"/> where p.id=#{productId}
 	</select>
 	
@@ -18,6 +18,17 @@
 		select id,is_show,product_id,imgpath
 		from t_product_imgs where product_id=#{productId} and is_show=#{isShow}
 	</select>
+	
+	<select id="findHotProducts" parameterType="int" resultMap="SelectProduct">
+		select p.id pid,p.product_name,p.normalprice,p.product_imgpath from t_product p JOIN t_salesitem si on 
+		p.id=si.productid GROUP BY si.productid order by sum(pcount) desc limit #{i};
+	</select>
+
+	<select id="findCategoryProducts" parameterType="int" resultMap="SelectProduct">
+		select p.id pid,p.product_name,p.normalprice,p.product_imgpath from t_product p 
+		where shelf=1 and root_categoryid=#{i} order by product_date desc limit 8;
+	</select>
+	
 	
 	<resultMap type="Product" id="SelectProduct">
 		<id property="id" column="pid"/>
@@ -29,6 +40,8 @@
 		<result property="shelf" column="shelf"/>
 		<result property="productDate" column="product_date"/>
 		<result property="productImgpath" column="product_imgpath"/>
+		<result property="parentCategoryId" column="parent_categoryid"/>
+		<result property="rootCategoryId" column="root_categoryid"/>
 		<association property="category" javaType="Category">
 			<id property="id" column="cid"/>
 			<result property="categoryName" column="category_name"/>

@@ -6,7 +6,7 @@
 	<!-- 动态sql -->
 	<sql id="baseSql">             
 		select p.id pid,p.product_name,p.product_description,p.normalprice,
-		p.memberprice,p.stock,p.shelf,p.product_date,p.product_imgpath,
+		p.memberprice,p.parent_categoryid,p.root_categoryid,p.stock,p.shelf,p.product_date,p.product_imgpath,
 		c.id cid,c.category_name,c.category_description,c.category_parent_id,c.leaf,c.grade
 		from t_product p join t_category c on p.product_categoryid=c.id
 	</sql>
@@ -94,8 +94,8 @@
 	</select>
 	
 	<insert id="insert" parameterType="Product" useGeneratedKeys="true">
-		insert into t_product(product_name,product_description,normalprice,memberprice,stock,shelf,product_date,product_categoryid,product_imgpath)
-		 values(#{productName},#{productDescription},#{normalprice},#{memberprice},#{stock},#{shelf},#{productDate},#{categoryId},#{productImgpath})
+		insert into t_product(product_name,product_description,normalprice,memberprice,stock,shelf,product_date,product_categoryid,parent_categoryid,root_categoryid,product_imgpath)
+		 values(#{productName},#{productDescription},#{normalprice},#{memberprice},#{stock},#{shelf},#{productDate},#{categoryId},#{parentCategoryId},#{rootCategoryId},#{productImgpath})
 		<selectKey resultType="int" keyColumn="id" keyProperty="id" order="AFTER">
 			select last_insert_id()
 		</selectKey>
@@ -117,7 +117,7 @@
 	<update id="update" parameterType="Product">
 		update t_product set product_name=#{productName},product_description=#{productDescription},
 		normalprice=#{normalprice},memberprice=#{memberprice},stock=#{stock},shelf=#{shelf},
-		product_date=#{productDate},product_categoryid=#{categoryId},product_imgpath=#{productImgpath}
+		product_date=#{productDate},product_categoryid=#{categoryId},parent_categoryid=#{parentCategoryId},root_categoryid=#{rootCategoryId},product_imgpath=#{productImgpath}
 		where id=#{id}
 	</update>
 	<delete id="delete" parameterType="int">
@@ -140,6 +140,8 @@
 		<result property="shelf" column="shelf"/>
 		<result property="productDate" column="product_date"/>
 		<result property="productImgpath" column="product_imgpath"/>
+		<result property="parentCategoryId" column="parent_categoryid"/>
+		<result property="rootCategoryId" column="root_categoryid"/>
 		<association property="category" javaType="Category">
 			<id property="id" column="cid"/>
 			<result property="categoryName" column="category_name"/>

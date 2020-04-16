@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.fsClothes.pojo.Product;
 import com.fsClothes.pojo.ProductImgPath;
+import com.fsClothes.pojo.SalesItem;
 
 /** 
 * @author MrDCG 
@@ -14,9 +15,14 @@ import com.fsClothes.pojo.ProductImgPath;
 */
 public interface ItemMapper {
 
-	Product findProduct(int productId);
-
 	List<ProductImgPath> findImgPaths(@Param("productId")int productId,@Param("isShow")int isShow);
+
+	Product findItemInfo(int productId);
+
+	List<Product> findHotProducts(Integer i);
+
+	List<Product> findCategoryProducts(int i);
+
 
 
 }

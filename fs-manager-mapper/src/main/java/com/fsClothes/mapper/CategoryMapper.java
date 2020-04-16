@@ -55,4 +55,6 @@ public interface CategoryMapper {
 	void deleteData(int id);
 	//查找叶子结点
 	List<Category> findByLeaf();
+	List<Category> findRootCategory();
+	List<Category> findParentCategory(int id);
 }

@@ -40,4 +40,14 @@ public interface CategoryService {
 	void deleteDate(int id);
 	
 	List<Category> findByLeaf();
+	/**
+	 * 查找根类别
+	 * @return 根类别集合
+	 */
+	List<Category> findRootCategory();
+	/**
+	 * 根据根类别id查找二级子类别
+	 * @return 二级类别集合
+	 */
+	List<Category> findParentCategory(int id);
 }

@@ -66,4 +66,12 @@
 	<select id="findByLeaf" resultMap="SelectCategory">
 		select <include refid="baseSql"/> from t_category where leaf=1
 	</select>
+	
+	<select id="findRootCategory" resultMap="SelectCategory">
+		select <include refid="baseSql"/> from t_category where grade=1
+	</select>
+
+	<select id="findParentCategory" parameterType="int" resultMap="SelectCategory">
+		select <include refid="baseSql"/> from t_category where category_parent_id=#{id}
+	</select>
 </mapper>
