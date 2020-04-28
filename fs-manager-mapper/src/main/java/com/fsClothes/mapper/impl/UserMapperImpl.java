@@ -90,4 +90,8 @@ public class UserMapperImpl extends SqlSessionDaoSupport implements UserMapper {
 	public int findByRegisterDate(String startMonth, String endMonth) {
 		return getSqlSession().getMapper(UserMapper.class).findByRegisterDate(startMonth, endMonth);
 	}
+	@Override
+	public User findByLoginUser(String phone,String password) {
+		return getSqlSession().getMapper(UserMapper.class).findByLoginUser(phone,password);
+	}
 }

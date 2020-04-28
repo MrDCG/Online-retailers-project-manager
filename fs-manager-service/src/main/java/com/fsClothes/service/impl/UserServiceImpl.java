@@ -94,5 +94,10 @@ public class UserServiceImpl implements UserService {
 		return userMapper.findByRegisterDate(startMonth,endMonth);
 	}
 
+	@Override
+	public User findByLoginUser(String phone,String password) {
+		return userMapper.findByLoginUser(phone,password);
+	}
+
 
 }

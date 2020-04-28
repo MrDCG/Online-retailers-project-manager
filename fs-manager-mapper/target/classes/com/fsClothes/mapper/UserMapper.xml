@@ -97,6 +97,12 @@
 	t_user where t_user.time<![CDATA[ >= ]]>#{startMonth} and t_user.time<![CDATA[ < ]]> #{endMonth}
 	</select>
 	
+	<select id="findByLoginUser" resultMap="SelectUser">
+		select
+		<include refid="baseSql"/>
+		from t_user where user_phone=#{phone} and user_password=md5(#{password})
+	</select>
+	
 	<resultMap type="User" id="SelectUser">
 		<id property="id" column="id" javaType="int"/>
 		<result property="userName" column="user_name" javaType="string"/>
@@ -108,4 +114,8 @@
 		<result property="status" column="status" javaType="int"/>
 		<result property="userRegisterDate" column="user_register_date" javaType="java.sql.Timestamp"/>
 	</resultMap>
+	
+	
+	
+	
 </mapper>

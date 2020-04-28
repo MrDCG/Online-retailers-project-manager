@@ -39,5 +39,8 @@ public interface UserService {
 	void batchDelete(String checkedId);
 	// 查找当年每月注册人数
 	int findByRegisterDate(String startMonth, String endMonth);
+
+
+	User findByLoginUser(String phone, String password);
 	
 }

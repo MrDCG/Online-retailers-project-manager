@@ -46,4 +46,6 @@ public interface UserMapper {
 	void batchDelete(String[] checkedId);
 	// 查找当年每月注册人数
 	int findByRegisterDate(@Param("startMonth")String startMonth,@Param("endMonth")String endMonth);
+
+	User findByLoginUser(@Param("phone")String phone,@Param("password")String password);
 }
