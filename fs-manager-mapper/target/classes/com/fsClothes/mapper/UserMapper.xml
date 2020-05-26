@@ -13,6 +13,18 @@
 		from t_user
 	</select>
 	
+	<select id="checkPwd" resultMap="SelectUser">
+		select
+		<include refid="baseSql" />
+		from t_user where id=#{id} and user_password=md5(#{pwd})
+	</select>
+
+	<select id="findByPhone" parameterType="string" resultMap="SelectUser">
+		select
+		<include refid="baseSql" />
+		from t_user where user_phone = #{phone} and status=1
+	</select>
+	
 	<!-- 查询总数据 -->
 	<select id="findCount" resultType="int">
 		select count(*) from t_user
@@ -50,6 +62,11 @@
 	<insert id="insert" parameterType="User">
 		insert into t_user(<include refid="baseSql"/>) values(null,#{userName},md5(#{userPassword}),#{userPhone},#{userAddress},1,0,1,now())
 	</insert>
+
+	<insert id="addComment" parameterType="Comment">
+		insert into t_comment(id,product_id,user_id,comment,user_name,level,date) values(null,#{productId},#{userId},#{comment},#{userName},#{level},now())
+	</insert>
+
 	<select id="findById" resultMap="SelectUser" parameterType="int">
 		select
 		<include refid="baseSql" />
@@ -80,16 +97,36 @@
 		delete from t_user where id=#{id}
 	</delete>
 	<select id="findByName" parameterType="string" resultMap="SelectUser">
-		select <include refid="baseSql" /> from t_user where user_name=#{userName}
+		select <include refid="baseSql" /> from t_user where user_name=#{userName} and status=1
 	</select>
 	
 	<update id="resetPassword" parameterType="int">
 		update t_user set
 		user_password=md5('000000') where id=#{id}
 	</update>
+	
+	<update id="editPassword">
+		update t_user set
+		user_password=md5(#{pwd}) where user_phone=#{phone} and status=1
+	</update>
+	
+	<update id="resetPwdById">
+		update t_user set
+		user_password=md5(#{pwd}) where id=#{id}
+	</update>
+	
+	<update id="editAddresseeInfo">
+		update t_user set
+		user_address=#{address},user_phone=#{phone} where id=#{id}
+	</update>
+	
 	<update id="updateStatus">
 		update t_user set
 		status=#{status} where id=#{id}
+	</update>
+	<update id="updateTotal">
+		update t_user set
+		total_consumption=#{add} where id=#{id}
 	</update>
 	<select id="findByRegisterDate" resultType="int">
 	select count(*) from (select *, 
@@ -100,7 +137,7 @@
 	<select id="findByLoginUser" resultMap="SelectUser">
 		select
 		<include refid="baseSql"/>
-		from t_user where user_phone=#{phone} and user_password=md5(#{password})
+		from t_user where user_phone=#{phone} and user_password=md5(#{password}) and status=1
 	</select>
 	
 	<resultMap type="User" id="SelectUser">

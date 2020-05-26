@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.fsClothes.mapper.CartMapper;
 import com.fsClothes.pojo.CartItem;
+import com.fsClothes.pojo.CartItemVO;
 
 
 /** 
@@ -33,8 +34,8 @@ public class CartMapperImpl extends SqlSessionDaoSupport implements CartMapper {
 	}
 
 	@Override
-	public void updateCartItemPCount(Integer pCount) {
-		getSqlSession().getMapper(CartMapper.class).updateCartItemPCount(pCount);
+	public void updateCartItemPCount(@Param("id")Integer id,@Param("pCount")Integer pCount) {
+		getSqlSession().getMapper(CartMapper.class).updateCartItemPCount(id,pCount);
 	}
 
 	@Override
@@ -55,6 +56,16 @@ public class CartMapperImpl extends SqlSessionDaoSupport implements CartMapper {
 	@Override
 	public void batchDelCartItems(String[] id) {
 		getSqlSession().getMapper(CartMapper.class).batchDelCartItems(id);
+	}
+
+	@Override
+	public List<CartItem> findCartItemsById(String[] id) {
+		return getSqlSession().getMapper(CartMapper.class).findCartItemsById(id);
+	}
+
+	@Override
+	public void updatePCount(List<CartItemVO> ciVOs) {
+		getSqlSession().getMapper(CartMapper.class).updatePCount(ciVOs);
 	}
 
 }

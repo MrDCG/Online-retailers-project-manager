@@ -1,5 +1,6 @@
 package com.fsClothes.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.fsClothes.pojo.Admin;
@@ -36,6 +37,26 @@ public interface AdminService {
 	void resetPassword(int id);
 
 	int findAllCount();
+	/**
+	 * 登录查询
+	 * @param adminName 管理员名字
+	 * @param adminPassword 管理员密码
+	 * @return 管理员
+	 */
+	Admin findLogin(String adminName, String adminPassword);
+	/**
+	 * 修改权限
+	 * @param id adminId
+	 * @param authorization 权限
+	 */
+	void modifyAuth(Integer id, Integer authorization);
+	/**
+	 * 月季度查询营收额
+	 * @param startMonth 开始时间
+	 * @param endMonth 结束时加
+	 * @return 金额
+	 */
+	BigDecimal findByOrderDate(String startMonth, String endMonth);
 	
 	
 }

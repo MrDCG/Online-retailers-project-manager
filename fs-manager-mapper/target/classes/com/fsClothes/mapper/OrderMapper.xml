@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fsClothes.mapper.OrderMapper">
+	<!-- 动态sql -->
+	<sql id="baseSql">             
+		id,order_no,order_price,order_date
+	</sql>
+	
+	<select id="findAllOrders" resultMap="Order">
+		select <include refid="baseSql"/> from t_order
+	</select>
+	<insert id="insertOrder" parameterType="Order">
+		insert into t_order values(null,#{orderNo},#{orderPrice},now())
+	</insert>
+	<insert id="insertSalesItems">
+		insert into t_salesitem
+		(id,productid,unitprice,pcount,order_no)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			null,
+			#{item.id},
+			#{item.unitPrice},
+			#{item.pCount},
+			#{orderNo}
+			)
+		</foreach>
+	</insert>
+	<insert id="insertSalesOrder">
+		insert into t_salesorder values(null,#{userId},#{addresseeinfo.address},#{orderNo},#{status},#{addresseeinfo.name},#{addresseeinfo.phone})
+	</insert>
+	
+	<select id="findOrdersCount" resultType="int">
+		select count(*) from t_order 
+	</select>
+	
+	<select id="findOrderItems" resultMap="OrderItemsVO">
+		select t1.order_no,t1.productid,t4.product_name,t4.product_imgpath,
+		t1.unitprice,t1.pcount,t3.order_price,t3.order_date,t2.status 
+		from t_salesitem t1 join t_salesorder t2 on t1.order_no=t2.order_no 
+		join t_order t3 on t1.order_no=t3.order_no 
+		join t_product t4 on t1.productid=t4.id 
+		<where>
+			t2.userid=#{userId}
+			<if test="status!=null">
+				and t2.status = #{status}
+			</if>
+		</where>
+		ORDER BY t3.order_date desc 
+		<if test="limit!=null">
+				limit #{limit};
+		</if>
+		
+	</select>
+	
+	<select id="findOrdersByPage" resultMap="OrderVO">
+		select t1.id,t1.order_no,t1.order_price,t1.order_date,t2.addr,t2.addressee,t2.phone,t2.status
+		from t_order t1 join t_salesorder t2 on t1.order_no=t2.order_no
+		limit #{startIndex},#{pageSize}
+	</select>
+	
+	<update id="updateOrderStatus">
+		update t_salesorder set 
+		status=#{status} where order_no=#{orderNo}
+	</update>
+	<delete id="orderDelete">
+		delete from t_order where id in 
+		<foreach collection="array" item="id" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<select id="findConditionCount" parameterType="OrderConditionVO" resultType="int">
+		select count(*) from t_salesorder t2  join t_order t1 on t1.order_no=t2.order_no
+		<where>
+			<if test="orderNo!=null">
+				t1.order_no=#{orderNo}
+			</if>
+			<if test="lowprice!=null and highprice!=null">
+				and t1.order_price between #{lowprice} and #{highprice}
+			</if>
+			<if test="lowprice!=null and highprice==null">
+				and t1.order_price >= #{lowprice}
+			</if>
+			<if test="lowprice==null and highprice!=null">
+				and t1.order_price <![CDATA[<=]]> #{highprice}
+			</if>
+			<if test="userName!=null">
+				and t2.addressee=#{userName}
+			</if>
+			<if test="-1!=status">
+				and t2.status=#{status}
+			</if>
+			<if test="startDate!=null and endDate!=null">
+				and t1.order_date between #{startDate} and #{endDate}
+			</if>
+			<if test="startDate!=null and endDate==null">
+				and t1.order_date >= #{startDate}
+			</if>
+			<if test="startDate==null and endDate!=null">
+				and t1.order_date<![CDATA[<=]]>#{endDate}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findCondition" resultMap="OrderVO">
+		select t1.id,t1.order_no,t1.order_price,t1.order_date,t2.addr,t2.addressee,t2.phone,t2.status
+		from t_order t1 join t_salesorder t2 on t1.order_no=t2.order_no
+		<where>
+			<if test="orderConditionVO.orderNo!=null">
+				t1.order_no=#{orderConditionVO.orderNo}
+			</if>
+			<if test="orderConditionVO.lowprice!=null and orderConditionVO.highprice!=null">
+				and t1.order_price between #{orderConditionVO.lowprice} and #{orderConditionVO.highprice}
+			</if>
+			<if test="orderConditionVO.lowprice!=null and orderConditionVO.highprice==null">
+				and t1.order_price >= #{orderConditionVO.lowprice}
+			</if>
+			<if test="orderConditionVO.lowprice==null and orderConditionVO.highprice!=null">
+				and t1.order_price <![CDATA[<=]]> #{orderConditionVO.highprice}
+			</if>
+			
+			<if test="orderConditionVO.userName!=null">
+				and t2.addressee=#{orderConditionVO.userName}
+			</if>
+			<if test="-1!=orderConditionVO.status">
+				and t2.status=#{orderConditionVO.status}
+			</if>
+			
+			<if test="orderConditionVO.startDate!=null and orderConditionVO.endDate!=null">
+				and t1.order_date between #{orderConditionVO.startDate} and #{orderConditionVO.endDate}
+			</if>
+			<if test="orderConditionVO.startDate!=null and orderConditionVO.endDate==null">
+				and t1.order_date >= #{orderConditionVO.startDate}
+			</if>
+			<if test="orderConditionVO.startDate==null and orderConditionVO.endDate!=null">
+				and t1.order_date<![CDATA[<=]]>#{orderConditionVO.endDate}
+			</if>
+		</where>
+			limit #{startIndex},#{pageSize}
+	</select>
+	
+	<resultMap type="OrderVO" id="OrderVO">
+		<id property="id" column="id"/>
+		<result property="orderNo" column="order_no"/>
+		<result property="orderPrice" column="order_price"/>
+		<result property="orderDate" column="order_date"/>
+		<result property="addressee" column="addressee"/>
+		<result property="phone" column="phone"/>
+		<result property="status" column="status"/>
+		<result property="addr" column="addr"/>
+		
+	</resultMap>
+	
+	<resultMap type="Order" id="Order">
+		<id property="id" column="id"/>
+		<result property="orderNo" column="order_no"/>
+		<result property="orderPrice" column="order_price"/>
+		<result property="orderDate" column="order_date"/>
+	</resultMap>
+	
+	<resultMap type="OrderItemOV" id="OrderItemsVO">
+		<result property="orderNo" column="order_no"/>
+		<result property="productId" column="productid"/>
+		<result property="unitPrice" column="unitprice"/>
+		<result property="pCount" column="pcount"/>
+		
+		<result property="productName" column="product_name"/>
+		<result property="productImgpath" column="product_imgpath"/>
+		<result property="orderPrice" column="order_price"/>
+		<result property="orderDate" column="order_date"/>
+		<result property="status" column="status"/>
+	</resultMap>
+</mapper>

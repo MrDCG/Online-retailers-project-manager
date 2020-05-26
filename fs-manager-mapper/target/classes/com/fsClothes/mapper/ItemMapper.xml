@@ -29,6 +29,41 @@
 		where shelf=1 and root_categoryid=#{i} order by product_date desc limit 8;
 	</select>
 	
+	<select id="findAllCommenCount" parameterType="int" resultType="int">
+		select count(*)
+		from t_comment where product_id=#{productId}
+	</select>
+	
+
+	<select id="findAllComment" resultMap="Comment">
+		select id,product_id,user_id,comment,user_name,level,date from t_comment where product_id=#{productId} order by date desc limit #{startIndex},#{pageSize}
+	</select>
+	
+	<select id="searchItemCount" resultType="int">
+		select count(*)
+		from t_product 
+		<where>
+			(product_name like concat("%",#{keywords},"%") 
+			or product_description like concat("%",#{keywords},"%"))
+			<if test="categoryId!=null">
+				and product_categoryid=#{categoryId}
+			</if>
+		</where>
+		 
+	</select>
+	
+	<select id="searchItems"  resultMap="SelectProduct">
+		select p.id pid,p.product_name,p.product_description,p.normalprice,p.product_imgpath from t_product p 
+		<where>
+			(product_name like concat("%",#{keywords},"%") 
+			or product_description like concat("%",#{keywords},"%"))
+			<if test="categoryId!=null">
+				and product_categoryid=#{categoryId}
+			</if>
+			and shelf=1
+		</where>
+		order by product_date desc limit #{startIndex},#{pageSize}
+	</select>
 	
 	<resultMap type="Product" id="SelectProduct">
 		<id property="id" column="pid"/>
@@ -57,5 +92,14 @@
 		<result property="productId" column="product_id"/>
 		<result property="isShow" column="is_show"/>
 		<result property="imgPath" column="imgpath"/>
+	</resultMap>
+	<resultMap type="Comment" id="Comment">
+		<id property="id" column="id"/>
+		<result property="productId" column="product_id"/>
+		<result property="userId" column="user_id"/>
+		<result property="comment" column="comment"/>
+		<result property="userName" column="user_name"/>
+		<result property="level" column="level"/>
+		<result property="date" column="date"/>
 	</resultMap>
 </mapper>

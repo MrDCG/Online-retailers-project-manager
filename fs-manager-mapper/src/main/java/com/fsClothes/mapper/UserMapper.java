@@ -1,9 +1,11 @@
 package com.fsClothes.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.fsClothes.pojo.Comment;
 import com.fsClothes.pojo.User;
 
 
@@ -48,4 +50,45 @@ public interface UserMapper {
 	int findByRegisterDate(@Param("startMonth")String startMonth,@Param("endMonth")String endMonth);
 
 	User findByLoginUser(@Param("phone")String phone,@Param("password")String password);
+	/**
+	 * 修改用户地址和手机号
+	 * @param addresseeinfo 收件人信息
+	 */
+	void editAddresseeInfo(@Param("id")Integer id,@Param("address")String address,@Param("phone")String phone);
+	/**
+	 * 更新用户总消费
+	 * @param id 
+	 * @param add 总消费
+	 */
+	void updateTotal(@Param("id")Integer id, @Param("add")BigDecimal add);
+	/**
+	 * 查找用户
+	 * @param 手机号
+	 * @return 用户
+	 */
+	User findByPhone(String phone);
+	/**
+	 * 修改密码
+	 * @param phone 手机号
+	 * @param pwd 新密码
+	 */
+	void editPassword(@Param("phone")String phone,@Param("pwd") String pwd);
+	/**
+	 * 验证用户密码
+	 * @param id 用户id
+	 * @param pwd 原密码
+	 * @return 用户
+	 */
+	User checkPwd(@Param("id")Integer id, @Param("pwd")String pwd);
+	/**
+	 * 修改密码
+	 * @param id 用户id
+	 * @param pwd 密码
+	 */
+	void resetPwdById(@Param("id")Integer id, @Param("pwd")String pwd);
+	/**
+	 * 添加评论
+	 * @param comment 评论
+	 */
+	void addComment(Comment comment);
 }

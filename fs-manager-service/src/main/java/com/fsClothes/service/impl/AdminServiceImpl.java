@@ -1,5 +1,6 @@
 package com.fsClothes.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +89,21 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int findAllCount() {
 		return adminMapper.findCount();
+	}
+
+	@Override
+	public Admin findLogin(String adminName, String adminPassword) {
+		return adminMapper.findLogin(adminName,adminPassword);
+	}
+
+	@Override
+	public void modifyAuth(Integer id, Integer authorization) {
+		adminMapper.modifyAuth(id,authorization);
+	}
+
+	@Override
+	public BigDecimal findByOrderDate(String startMonth, String endMonth) {
+		return adminMapper.findByOrderDate(startMonth,endMonth);
 	}
 
 }

@@ -11,8 +11,25 @@
 		select <include refid="baseSql"/> from t_cartitem
 		where user_id=#{userId} and product_id=#{productId}
 	</select>
-	<update id="updateCartItemPCount" parameterType="int">
-		update t_cartitem set pcount=#{pCount}
+	<update id="updatePCount" parameterType="list">
+		update t_cartitem 
+		<set>
+			<trim prefix="pcount=case" suffix="end,">
+				<foreach collection="list" item="item" index="index">
+					when id=#{item.id} then #{item.pCount}
+				</foreach>
+			</trim>
+		</set>
+		where id in
+		<foreach collection="list" item="item" index="index"
+			separator="," open="(" close=")">
+			#{item.id}
+		</foreach>
+
+	</update>
+	<update id="updateCartItemPCount">
+		update t_cartitem set 
+		pcount=#{pCount} where id=#{id}
 	</update>
 	<insert id="insertCart" parameterType="CartItem">
 		insert into t_cartitem values(null,#{productId},#{userId},#{productName},#{productImgpath},#{unitPrice},#{pCount},now())
@@ -33,7 +50,13 @@
 			#{id}
 		</foreach>
 	</delete>
-	
+	<select id="findCartItemsById" resultMap="Carts">
+		select <include refid="baseSql"/> from t_cartitem where id in
+		<foreach collection="array" item="id" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</select>
 	<resultMap type="CartItem" id="Carts">
 		<id property="id" column="id"/>
 		<result property="productId" column="product_id"/>

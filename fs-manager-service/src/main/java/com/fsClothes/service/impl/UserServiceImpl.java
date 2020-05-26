@@ -1,11 +1,13 @@
 package com.fsClothes.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fsClothes.mapper.UserMapper;
+import com.fsClothes.pojo.Comment;
 import com.fsClothes.pojo.Page;
 import com.fsClothes.pojo.User;
 import com.fsClothes.service.UserService;
@@ -97,6 +99,43 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findByLoginUser(String phone,String password) {
 		return userMapper.findByLoginUser(phone,password);
+	}
+
+	@Override
+	public void editAddresseeInfo(Integer id,String address,String phone) {
+		userMapper.editAddresseeInfo(id,address,phone);
+		
+	}
+
+	@Override
+	public void updateTotal(Integer id,BigDecimal add) {
+		userMapper.updateTotal(id,add);		
+	}
+
+	@Override
+	public User findByPhone(String phone) {
+		return userMapper.findByPhone(phone);
+	}
+
+	@Override
+	public void editPassword(String phone, String pwd) {
+		userMapper.editPassword(phone,pwd);
+	}
+
+	@Override
+	public User checkPwd(Integer id, String pwd) {
+		return userMapper.checkPwd(id,pwd);
+	}
+
+	@Override
+	public void resetPwdById(Integer id, String password) {
+		userMapper.resetPwdById(id,password);
+	}
+
+	@Override
+	public void addComment(Comment comment) {
+		userMapper.addComment(comment);
+		
 	}
 
 

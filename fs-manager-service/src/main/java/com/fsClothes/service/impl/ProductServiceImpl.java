@@ -191,7 +191,6 @@ public class ProductServiceImpl implements ProductService {
     	}
     	
     	page.setTotalRecord(productMapper.findConditionCount(productConditionVO));
-    	System.out.println(page.getTotalRecord());
 		page.setList(productMapper.findCondition(page.getStartIndex(), page.getPageSize(),productConditionVO));
 		
 		return page;

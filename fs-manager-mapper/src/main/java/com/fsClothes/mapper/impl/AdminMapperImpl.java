@@ -1,5 +1,6 @@
 package com.fsClothes.mapper.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -70,6 +71,18 @@ public class AdminMapperImpl extends SqlSessionDaoSupport implements AdminMapper
 	@Override
 	public int findCount() {
 		return getSqlSession().getMapper(AdminMapper.class).findCount();
+	}
+	@Override
+	public Admin findLogin(@Param("adminName")String adminName, @Param("adminPassword")String adminPassword) {
+		return getSqlSession().getMapper(AdminMapper.class).findLogin(adminName, adminPassword);
+	}
+	@Override
+	public void modifyAuth(@Param("id")Integer id, @Param("authorization")Integer authorization) {
+		getSqlSession().getMapper(AdminMapper.class).modifyAuth(id, authorization);		
+	}
+	@Override
+	public BigDecimal findByOrderDate(@Param("startMonth")String startMonth, @Param("endMonth")String endMonth) {
+		return getSqlSession().getMapper(AdminMapper.class).findByOrderDate(startMonth, endMonth);
 	}
 	
 }

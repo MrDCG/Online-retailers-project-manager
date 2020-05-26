@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.fsClothes.mapper.ItemMapper;
+import com.fsClothes.pojo.Comment;
 import com.fsClothes.pojo.Product;
 import com.fsClothes.pojo.ProductImgPath;
 import com.fsClothes.pojo.SalesItem;
@@ -45,6 +46,26 @@ public class ItemMapperImpl extends SqlSessionDaoSupport implements ItemMapper {
 	@Override
 	public List<Product> findCategoryProducts(int i) {
 		return getSqlSession().getMapper(ItemMapper.class).findCategoryProducts(i);
+	}
+
+	@Override
+	public Integer findAllCommenCount(int productId) {
+		return getSqlSession().getMapper(ItemMapper.class).findAllCommenCount(productId);
+	}
+
+	@Override
+	public List<Comment> findAllComment(@Param("startIndex")Integer startIndex, @Param("pageSize")Integer pageSize, @Param("productId")int productId) {
+		return getSqlSession().getMapper(ItemMapper.class).findAllComment(startIndex, pageSize, productId);
+	}
+
+	@Override
+	public Integer searchItemCount(@Param("keywords")String keywords,@Param("categoryId")Integer categoryId) {
+		return getSqlSession().getMapper(ItemMapper.class).searchItemCount(keywords,categoryId);
+	}
+
+	@Override
+	public List<Product> searchItems(@Param("startIndex") int startIndex, @Param("pageSize") Integer pageSize,@Param("keywords") String keywords,@Param("categoryId") Integer categoryId) {
+		return getSqlSession().getMapper(ItemMapper.class).searchItems(startIndex, pageSize, keywords,categoryId);
 	}
 
 

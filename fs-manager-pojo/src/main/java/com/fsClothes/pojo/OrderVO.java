@@ -1,6 +1,8 @@
 package com.fsClothes.pojo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,25 +10,24 @@ import lombok.NoArgsConstructor;
 
 /** 
 * @author MrDCG 
-* @version 创建时间：2020年4月16日 上午9:51:47 
+* @version 创建时间：2020年4月16日 上午9:45:16 
 *
 */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SalesOrder implements Serializable {
-
+public class OrderVO implements Serializable {
 	/**
-	 * 序列化
+	 * 
 	 */
-	private static final long serialVersionUID = 1983852591740016891L;
-	
+	private static final long serialVersionUID = -3852237311916835150L;
 	private Integer id;
-	private Integer userId;
-	private String addr;
 	private String orderNo;
+	private BigDecimal orderPrice;
+	private Timestamp orderDate;
 	private Integer status;
+	//收件人
 	private String addressee;
 	private String phone;
-	
+	private String addr;
 }

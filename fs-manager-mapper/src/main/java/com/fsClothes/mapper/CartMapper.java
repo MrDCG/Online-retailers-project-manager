@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.fsClothes.pojo.CartItem;
+import com.fsClothes.pojo.CartItemVO;
 
 /**
  * @author MrDCG
@@ -23,7 +24,7 @@ public interface CartMapper {
 	 * 更新购物车商品的数量
 	 * @param pCount 需要添加的商品的数量
 	 */
-	void updateCartItemPCount(Integer pCount);
+	void updateCartItemPCount(@Param("id")Integer id,@Param("pCount")Integer pCount);
 	/**
 	 * 添加购物车商品
 	 * @param ci 待添加的购物车商品
@@ -45,5 +46,16 @@ public interface CartMapper {
 	 * @param id 待删除的购物车商品id
 	 */
 	void batchDelCartItems(String[] id);
+	/**
+	 * 根据传进来的id查找items
+	 * @param checkedId id数组
+	 * @return item集合
+	 */
+	List<CartItem> findCartItemsById(String[] id);
+	/**
+	 * 更新cartItem数量
+	 * @param ciVOs id，PCount集合
+	 */
+	void updatePCount(List<CartItemVO> ciVOs);
 
 }
